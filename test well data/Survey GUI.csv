@@ -1,4 +1,4 @@
-Well Unique Identifier,Measured Depth,Inclination,Azimuth Angle
+Well Unique Identifier,MeasuredDepth,Inclination,Azimuth
 test-well,0,0,0
 test-well,100,0,0
 test-well,1000,0,0
