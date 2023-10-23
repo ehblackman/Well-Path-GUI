@@ -1,0 +1,3 @@
+Gas Analysis #,Well Identifier,Interval Top(m),Interval Base(m),H2 Air Free,He Air Free,N2 Air Free,CO2 Air Free 
+1,test-well,750,760,0.0476,0.0023,0.3452,0.0005
+2,test-well,1200,1210,0.06,0.02,0.4,0.006
