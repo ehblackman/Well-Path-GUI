@@ -14,11 +14,12 @@ collar_data = pd.read_csv(f'{path}/{collar_csv}')
 survey_data = pd.read_csv(f'{path}/{survey_csv}')
 sample_data = pd.read_csv(f'{path}/{sample_csv}')
 
-# Extract UWI, latitude, longitude, and elevation from collar
-latitude = collar_data['Surf-Hole Latitude (NAD83)']
-longitude = collar_data['Surf-Hole Longitude (NAD83)']
-elevation = collar_data['Ground Elevation (m)']
+# Calculate and add a new column 'MidpointDepth' to sample_data
+sample_data['sample_midpoint_depth'] = (sample_data['Interval Base(m)'] + sample_data['Interval Top(m)']) / 2
+# Delete rows with missing 'Interval Top(m)' or 'Interval Base(m)' data in sample_data
+sample_data = sample_data.dropna(subset=['Interval Top(m)', 'Interval Base(m)'])
 
+# Now, the sample_data dataframe no longer contains rows with missing data
 
 # Define the possible alternative names for the well identifier column
 alternative_names = ["Well Unique Identifier", "CPA Pretty Well ID", "Well Identifier"]
@@ -35,7 +36,28 @@ change_alternative_to_uwi(collar_data)
 change_alternative_to_uwi(survey_data)
 change_alternative_to_uwi(sample_data)
 
+# Convert the "UWI" column to string data type in collar_data
+collar_data['UWI'] = collar_data['UWI'].astype(str)
+# Convert the "UWI" column to string data type in survey_data
+survey_data['UWI'] = survey_data['UWI'].astype(str)
+# Convert the "UWI" column to string data type in sample_data
+sample_data['UWI'] = sample_data['UWI'].astype(str)
 
-print(collar_data)
+
+# Extract UWI, latitude, longitude, and elevation from collar
+UWI = collar_data['UWI']
+latitude = collar_data['Surf-Hole Latitude (NAD83)']
+longitude = collar_data['Surf-Hole Longitude (NAD83)']
+elevation = collar_data['Ground Elevation (m)']
+# Extract sample_midpoint_depth from survey
+midpoint = sample_data['sample_midpoint_depth']
+
+
+
+
+
+#print(collar_data)
 print(survey_data)
-print(sample_data)
+#print(sample_data)
+#print(UWI, midpoint)
+
