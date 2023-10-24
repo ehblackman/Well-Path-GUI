@@ -1,5 +1,6 @@
 from classes import Collar, Well, Survey, Sample
 import well_profile as wp
+from well_profile.well import Well
 import pandas as pd
 
 
@@ -19,7 +20,18 @@ sample_data['sample_midpoint_depth'] = (sample_data['Interval Base(m)'] + sample
 # Delete rows with missing 'Interval Top(m)' or 'Interval Base(m)' data in sample_data
 sample_data = sample_data.dropna(subset=['Interval Top(m)', 'Interval Base(m)'])
 
-# Now, the sample_data dataframe no longer contains rows with missing data
+"Justin see below plz"
+
+# Iterate through the sample_data dataframe and calculate TVD for each sample
+depth_to_query = sample_data['sample_midpoint_depth']
+depth_type_to_query = 'md'
+
+
+point_info = Well.get_point(depth_to_query, depth_type_to_query)
+sample_data['TVD'] = Well.get_point(depth_to_query, depth_type_to_query)['tvd']
+
+
+
 
 # Define the possible alternative names for the well identifier column
 alternative_names = ["Well Unique Identifier", "CPA Pretty Well ID", "Well Identifier"]
@@ -57,7 +69,7 @@ midpoint = sample_data['sample_midpoint_depth']
 
 
 #print(collar_data)
-print(survey_data)
-#print(sample_data)
+#print(survey_data)
+print(sample_data)
 #print(UWI, midpoint)
 
