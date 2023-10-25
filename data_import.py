@@ -10,7 +10,7 @@ survey_csv = 'Survey GUI.csv'
 sample_csv = 'Sample GUI.csv'
 geology_csv = 'Geology GUI.csv'
 
-def import_collar(path, collar_csv):
+def import_collar(path, collar_csv, survey_data):
     # Load collar from CSV files to pandas dataframes
     collar_data = pd.read_csv(f'{path}/{collar_csv}')
 
@@ -20,8 +20,19 @@ def import_collar(path, collar_csv):
     #This means we can use UWI as the well name across dataframes
     # Convert the "UWI" column to string data type in collar_data
     collar_data['UWI'] = collar_data['UWI'].astype(str)
+
+    collar_data['well'] = collar_data['UWI'].apply(lambda u: load_well(collar_data, survey_data, u))
+    
     return collar_data
 
+def load_well(collar_data, survey_data, uwi):
+    collar = collar_data[collar_data['UWI']==uwi]
+    well_data = survey_data[survey_data['UWI']==uwi]
+    north = float(list(collar['Surf-Hole Northing (NAD83)'])[0])
+    east = float(list(collar['Surf-Hole Easting (NAD83)'])[0])
+    well = wp.load(well_data, set_start={'north': north, 'east': east, 'depth': 0})   
+    return well
+    
 def import_survey(path, survey_csv):
     # Load data
     survey_data = pd.read_csv(f'{path}/{survey_csv}')
@@ -31,7 +42,7 @@ def import_survey(path, survey_csv):
     # Convert the "UWI" column to string data type in survey_data
     survey_data['UWI'] = survey_data['UWI'].astype(str)
 
-    survey_data = survey_data.rename(columns={'Azimuth angle': 'azimuth'})
+    survey_data = survey_data.rename(columns={'Azimuth Angle': 'azi'})
     survey_data = survey_data.rename(columns={'Inclination': 'inclination'})
     survey_data = survey_data.rename(columns={'Measured Depth': 'md'})
 
@@ -131,11 +142,13 @@ def get_point_info(wells, data, depth_type_to_query='md', col_name='MD'):
 # print(sample_data)
 #print(UWI, midpoint)
 
-collar_data = import_collar(path, collar_csv)
-import_survey(path, survey_csv)
-well = wp.load(import_survey(path, survey_csv))   
+survey_data = import_survey(path, survey_csv)
+collar_data = import_collar(path, collar_csv, survey_data)
 
-collar_data['well'] = [well, well]
-print(import_sample(path, sample_csv, collar_data))
-print(import_geology(path, geology_csv, collar_data))
+
+
+sample_data = import_sample(path, sample_csv, collar_data)
+geology_data = import_geology(path, geology_csv, collar_data)
+print(sample_data)
+print(geology_data)
 
