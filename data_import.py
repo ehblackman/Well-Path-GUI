@@ -49,7 +49,7 @@ def import_sample(path, sample_csv, collar_data):
     sample_data = sample_data.dropna(subset=['Interval Top(m)', 'Interval Base(m)'])
 
     # Get tvd
-    sample_data = get_point_info(collar_data, sample_data)
+    sample_data = get_point_info(collar_data, sample_data, col_name='sample_midpoint_depth')
 
     # Add ground elevation to sample data
     sample_data['Ground Elevation'] = sample_data['UWI'].apply(lambda u: get_col_UWI(collar_data, u, 'Ground Elevation (m)'))
@@ -65,7 +65,7 @@ def import_geology(path, geology_csv, collar_data):
 
 
     # Get tvd
-    geology_data = get_point_info(collar_data, geology_data)
+    geology_data = get_point_info(collar_data, geology_data, depth_type_to_query='md', col_name='TVD')
 
     # Add ground elevation to sample data
     geology_data['Ground Elevation'] = geology_data['UWI'].apply(lambda u: get_col_UWI(collar_data, u, 'Ground Elevation (m)'))
@@ -74,7 +74,7 @@ def import_geology(path, geology_csv, collar_data):
     return geology_data
     
 def get_col_UWI(df, uwi, col):
-    return df.loc[df['UWI']==uwi][col][0]
+    return list(df.loc[df['UWI']==uwi][col])[0]
 
 def change_alternative_to_uwi(dataframe):
     '''# Function to change alternative column names to "UWI"'''
@@ -86,11 +86,19 @@ def change_alternative_to_uwi(dataframe):
 
 
 
-def get_point_info(wells, sample_data, depth_type_to_query='md'):
+def get_point_info(wells, data, depth_type_to_query='md', col_name='MD'):
     '''# Iterate through the sample_data dataframe and calculate TVD for each sample
-    wells = df of wells with uwi col'''
-    df = sample_data.copy()
-    points_info = df.apply(lambda x: pd.Series(get_col_UWI(wells, x['UWI'], 'well').get_point(x['TVD'], depth_type_to_query)), axis=1)
+    wells = df of wells with uwi col
+    col_name = name of col with depths inside data'''
+    df = data.copy()
+    
+    def f(uwi, depth):
+        well = get_col_UWI(wells, uwi, 'well')
+        point_info = well.get_point(depth, depth_type_to_query)
+        return point_info
+    
+    points_info = df.apply(lambda x: pd.Series(f(x['UWI'], x[col_name])), axis=1)
+
     if depth_type_to_query=='md':
         df['TVD'] = points_info['tvd']
     df['Longitude'] = points_info['east']
@@ -120,8 +128,17 @@ def get_point_info(wells, sample_data, depth_type_to_query='md'):
 #print(UWI, midpoint)
 
 collar_data = import_collar(path, collar_csv)
-well = wp.load(f'{path}/{survey_csv}')   
-collar_data['well'] = [well]
 import_survey(path, survey_csv)
-import_sample(path, sample_csv, collar_data)
-import_geology(path, geology_csv, collar_data)
+# well = wp.load(f'{path}/{survey_csv}')   
+well = wp.get(3000,   # define target depth (md) in m or ft
+              profile='J',    # set J-type well profile 
+              kop=800,    # set kick off point in m or ft
+              eob=2000,   # set end of build in m or ft
+              build_angle=78,   # set build angle in °
+              cells_no=100,   # (optional) define number of cells
+              units='metric',   # (optional) define system of units 'metric' for meters or 'english' for feet
+              set_start={'north': 0, 'east': 0, 'depth': 0})    # (optional) set the location of initial point
+collar_data['well'] = [well, well]
+print(import_sample(path, sample_csv, collar_data))
+print(import_geology(path, geology_csv, collar_data))
+
