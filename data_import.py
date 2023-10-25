@@ -1,6 +1,5 @@
 from classes import Collar, Well, Survey, Sample
 import well_profile as wp
-from well_profile.well import Well
 import pandas as pd
 
 
@@ -20,15 +19,20 @@ sample_data['sample_midpoint_depth'] = (sample_data['Interval Base(m)'] + sample
 # Delete rows with missing 'Interval Top(m)' or 'Interval Base(m)' data in sample_data
 sample_data = sample_data.dropna(subset=['Interval Top(m)', 'Interval Base(m)'])
 
-"Justin see below plz"
 
 # Iterate through the sample_data dataframe and calculate TVD for each sample
 depth_to_query = sample_data['sample_midpoint_depth']
 depth_type_to_query = 'md'
 
+well = wp.load(f'{path}/{survey_csv}')   
 
-point_info = Well.get_point(depth_to_query, depth_type_to_query)
-sample_data['TVD'] = Well.get_point(depth_to_query, depth_type_to_query)['tvd']
+points_info = depth_to_query.apply(lambda d: pd.Series(well.get_point(d, depth_type_to_query)))
+
+
+sample_data['TVD'] = points_info['tvd']
+sample_data['Longitude'] = points_info['east']
+sample_data['Latitude'] = points_info['north']
+
 
 
 
@@ -64,8 +68,9 @@ elevation = collar_data['Ground Elevation (m)']
 # Extract sample_midpoint_depth from survey
 midpoint = sample_data['sample_midpoint_depth']
 
-
-
+# Add ground elevation to sample data
+sample_data['Ground Elevation'] = sample_data['UWI'].apply(lambda u: collar_data.loc[collar_data['UWI']==u]['Ground Elevation (m)'])
+sample_data['Sample Depth Below Sea Level'] = sample_data['Ground Elevation'] - sample_data['TVD']
 
 
 #print(collar_data)

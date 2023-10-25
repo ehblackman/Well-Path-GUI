@@ -1,3 +1,5 @@
+import well_profile as wp
+
 class Collar:
     def __init__(self, longitude, latitude, elevation):
         self.longitude = longitude
@@ -17,7 +19,7 @@ class Sample:
         self.bottom_interval = bottom_interval
         self.geochemical_data = geochemical_data
 
-class Well:
+class Well():
     def __init__(self, well_name, collar, survey_data=None, is_vertical=False):
         self.well_name = well_name
         self.collar = collar
