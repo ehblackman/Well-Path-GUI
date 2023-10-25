@@ -1,3 +1,3 @@
-CPA Pretty Well ID,Surf-Hole Latitude (NAD83),Surf-Hole Longitude (NAD83),Ground Elevation (m)
-test-well,49.20584N,103.25503W,565
-test-well2,48,100,200
+CPA Pretty Well ID,Surf-Hole Northing (NAD83),Surf-Hole Easting (NAD83),Ground Elevation (m)
+test-well,5430075.3,592761.9,565
+test-well2,5475924.5,639978.6,200
