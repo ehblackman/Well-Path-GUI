@@ -31,6 +31,10 @@ def import_survey(path, survey_csv):
     # Convert the "UWI" column to string data type in survey_data
     survey_data['UWI'] = survey_data['UWI'].astype(str)
 
+    survey_data = survey_data.rename(columns={'Azimuth angle': 'azimuth'})
+    survey_data = survey_data.rename(columns={'Inclination': 'inclination'})
+    survey_data = survey_data.rename(columns={'Measured Depth': 'md'})
+
     return survey_data
 
 def import_sample(path, sample_csv, collar_data):
