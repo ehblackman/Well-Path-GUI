@@ -68,7 +68,7 @@ def import_geology(path, geology_csv, collar_data):
     geology_data['UWI'] = geology_data['UWI'].astype(str)
 
 
-    # Get tvd
+    # Get long lat (see get point further down)
     geology_data = get_point_info(collar_data, geology_data, depth_type_to_query='md', col_name='TVD')
 
     # Add ground elevation to sample data
@@ -133,15 +133,8 @@ def get_point_info(wells, data, depth_type_to_query='md', col_name='MD'):
 
 collar_data = import_collar(path, collar_csv)
 import_survey(path, survey_csv)
-# well = wp.load(f'{path}/{survey_csv}')   
-well = wp.get(3000,   # define target depth (md) in m or ft
-              profile='J',    # set J-type well profile 
-              kop=800,    # set kick off point in m or ft
-              eob=2000,   # set end of build in m or ft
-              build_angle=78,   # set build angle in °
-              cells_no=100,   # (optional) define number of cells
-              units='metric',   # (optional) define system of units 'metric' for meters or 'english' for feet
-              set_start={'north': 0, 'east': 0, 'depth': 0})    # (optional) set the location of initial point
+well = wp.load(import_survey(path, survey_csv))   
+
 collar_data['well'] = [well, well]
 print(import_sample(path, sample_csv, collar_data))
 print(import_geology(path, geology_csv, collar_data))
