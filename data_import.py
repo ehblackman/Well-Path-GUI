@@ -79,7 +79,7 @@ def import_geology(path, geology_csv, collar_data):
     geology_data['UWI'] = geology_data['UWI'].astype(str)
 
 
-    # Get long lat (see get point further down)
+    # Get Northing / Easting (see get point further down)
     geology_data = get_point_info(collar_data, geology_data, depth_type_to_query='md', col_name='TVD')
 
     # Add ground elevation to sample data
@@ -116,8 +116,8 @@ def get_point_info(wells, data, depth_type_to_query='md', col_name='MD'):
 
     if depth_type_to_query=='md':
         df['TVD'] = points_info['tvd']
-    df['Longitude'] = points_info['east']
-    df['Latitude'] = points_info['north']
+    df['Easting'] = points_info['east']
+    df['Northing'] = points_info['north']
     return df
 
 
@@ -127,10 +127,10 @@ def get_point_info(wells, data, depth_type_to_query='md', col_name='MD'):
 
 
 
-# # Extract UWI, latitude, longitude, and elevation from collar
+# # Extract UWI, Northing, Easting, and elevation from collar
 # UWI = collar_data['UWI']
-# latitude = collar_data['Surf-Hole Latitude (NAD83)']
-# longitude = collar_data['Surf-Hole Longitude (NAD83)']
+# Northing = collar_data['Surf-Hole Northing (NAD83)']
+# Easting = collar_data['Surf-Hole Easting (NAD83)']
 # elevation = collar_data['Ground Elevation (m)']
 # # Extract sample_midpoint_depth from survey
 # midpoint = sample_data['sample_midpoint_depth']
