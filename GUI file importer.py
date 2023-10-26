@@ -29,6 +29,9 @@ def main():
     browse_button = tk.Button(frame, text="Browse", command=browse_file)
     browse_button.pack()
 
+    # Allow horizontal and vertical resizing
+    root.resizable(True, True)
+
     root.mainloop()
 
 if __name__ == "__main__":
