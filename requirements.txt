@@ -14,3 +14,4 @@ tenacity==8.2.3
 tzdata==2023.3
 well-profile==0.7.3
 jupyter
+tkinterdnd2
