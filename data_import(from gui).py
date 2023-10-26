@@ -1,19 +1,10 @@
 from classes import Collar, Well, Survey, Sample
 import well_profile as wp
 import pandas as pd
+from GUI_file_importer import collar_data, survey_data, sample_data, geology_data
 
 
-# File import
-path = 'test well data'
-collar_csv = 'Collar GUI.csv'
-survey_csv = 'Survey GUI.csv'
-sample_csv = 'Sample GUI.csv'
-geology_csv = 'Geology GUI.csv'
-
-def import_collar(path, collar_csv, survey_data):
-    # Load collar from CSV files to pandas dataframes
-    collar_data = pd.read_csv(f'{path}/{collar_csv}')
-
+def import_collar(collar_data, survey_data):
     # Preprocessing
     change_alternative_to_uwi(collar_data)
     # Call the function to change column names
@@ -33,10 +24,7 @@ def load_well(collar_data, survey_data, uwi):
     well = wp.load(well_data, set_start={'north': north, 'east': east, 'depth': 0})   
     return well
     
-def import_survey(path, survey_csv):
-    # Load data
-    survey_data = pd.read_csv(f'{path}/{survey_csv}')
-
+def import_survey(survey_data):
     # Preprocessing
     change_alternative_to_uwi(survey_data)
     # Convert the "UWI" column to string data type in survey_data
@@ -48,10 +36,7 @@ def import_survey(path, survey_csv):
 
     return survey_data
 
-def import_sample(path, sample_csv, collar_data):
-    # Load data
-    sample_data = pd.read_csv(f'{path}/{sample_csv}')
-    
+def import_sample(sample_data, collar_data):  
     # Preprocessing
     change_alternative_to_uwi(sample_data)
     # Convert the "UWI" column to string data type in sample_data
@@ -72,9 +57,9 @@ def import_sample(path, sample_csv, collar_data):
 
     return sample_data
 
-def import_geology(path, geology_csv, collar_data):
+def import_geology(geology_data, collar_data):
     # Load data
-    geology_data = pd.read_csv(f'{path}/{geology_csv}', skiprows=15)
+    geology_data = geology_data.iloc[15:]
     change_alternative_to_uwi(geology_data)
     geology_data['UWI'] = geology_data['UWI'].astype(str)
 
@@ -142,13 +127,13 @@ def get_point_info(wells, data, depth_type_to_query='md', col_name='MD'):
 # print(sample_data)
 #print(UWI, midpoint)
 
-surveys = import_survey(path, survey_csv)
-collars = import_collar(path, collar_csv, surveys)
+surveys = import_survey(survey_data)
+collars = import_collar(path, collar_data, surveys)
 
 
 
-samples = import_sample(path, sample_csv, collars)
-tops = import_geology(path, geology_csv, collars)
+samples = import_sample(sample_data, collars)
+tops = import_geology(geology_data, collars)
 
 print("COLLARS")
 print(collars)
