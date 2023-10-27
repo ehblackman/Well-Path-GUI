@@ -1,4 +1,3 @@
-from OLD.classes import Collar, Well, Survey, Sample
 import well_profile as wp
 import pandas as pd
 from GUI_file_importer import main
