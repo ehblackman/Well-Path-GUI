@@ -1,4 +1,4 @@
-from classes import Collar, Well, Survey, Sample
+from OLD.classes import Collar, Well, Survey, Sample
 import well_profile as wp
 import pandas as pd
 

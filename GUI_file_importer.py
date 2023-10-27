@@ -28,8 +28,8 @@ def import_files_to_dataframe():
                 geology_data = df
                 df_name = 'geology_data'
                 geology_data = pd.read_csv(file_path, skiprows=15)  # Drop the first 15 rows
-                print(df_name)
-                print(geology_data)  # Print the modified geology dataframe
+                #print(df_name)
+                #print(geology_data)  # Print the modified geology dataframe
             else:
                 # Apply naming rules for other CSV files here
                 # For example, if 'survey' is in the file name, set DataFrame name to 'survey_data'
@@ -45,8 +45,8 @@ def import_files_to_dataframe():
                 else:
                     df_name = file_name
                 
-                print(df_name)
-                print(df)  # Print the other dataframes
+                #print(df_name)
+                #print(df)  # Print the other dataframes
 
         except Exception as e:
             print(f"Error importing '{file_name}': {str(e)}")
