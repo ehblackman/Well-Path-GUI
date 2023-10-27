@@ -125,20 +125,20 @@ def get_point_info(wells, data, depth_type_to_query='md', col_name='MD'):
 # print(sample_data)
 #print(UWI, midpoint)
 collar_data, survey_data, sample_data, geology_data = main()
-
-surveys = import_survey(survey_data)
-collars = import_collar(collar_data, surveys)
-
-
-
-samples = import_sample(sample_data, collars)
-tops = import_geology(geology_data, collars)
-
-print("COLLARS")
-print(collars)
-print("SURVEYS")
-print(surveys)
-print("SAMPLES")
-print(samples)
+if __name__ == "__main__":
+    surveys = import_survey(survey_data)
+    collars = import_collar(collar_data, surveys)
+    
+    
+    
+    samples = import_sample(sample_data, collars)
+    tops = import_geology(geology_data, collars)
+    
+    print("COLLARS")
+    print(collars)
+    print("SURVEYS")
+    print(surveys)
+    print("SAMPLES")
+    print(samples)
 print("TOPS")
 print(tops)
