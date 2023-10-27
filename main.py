@@ -1,6 +1,6 @@
 import GUI_file_importer
-from data_clean import *
-from plotting.py import *
+import data_clean
+import plotting
 
 def main():
   # GUI import
