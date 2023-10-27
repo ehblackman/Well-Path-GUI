@@ -13,7 +13,7 @@ def main():
   tops = import_geology(geology_data, collars)
 
   # Plotting
-  plot(collar_data, sample_data)
+  plot(collars, tops)
   # Saving
 
   return collars, surveys, samples, tops
