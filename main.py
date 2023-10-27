@@ -1,5 +1,5 @@
 import GUI_file_importer
-from OLD.data_import import *
+from data_clean import *
 from plotting.py import *
 
 def main():
