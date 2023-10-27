@@ -1,7 +1,8 @@
 from classes import Collar, Well, Survey, Sample
 import well_profile as wp
 import pandas as pd
-from GUI_file_importer import collar_data, survey_data, sample_data, geology_data
+from GUI_file_importer import main
+
 
 
 def import_collar(collar_data, survey_data):
@@ -58,8 +59,6 @@ def import_sample(sample_data, collar_data):
     return sample_data
 
 def import_geology(geology_data, collar_data):
-    # Load data
-    geology_data = geology_data.iloc[15:]
     change_alternative_to_uwi(geology_data)
     geology_data['UWI'] = geology_data['UWI'].astype(str)
 
@@ -126,9 +125,10 @@ def get_point_info(wells, data, depth_type_to_query='md', col_name='MD'):
 #print(survey_data)
 # print(sample_data)
 #print(UWI, midpoint)
+collar_data, survey_data, sample_data, geology_data = main()
 
 surveys = import_survey(survey_data)
-collars = import_collar(path, collar_data, surveys)
+collars = import_collar(collar_data, surveys)
 
 
 

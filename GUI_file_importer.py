@@ -22,7 +22,7 @@ def import_files_to_dataframe():
     for file_path, file_name in selected_files.items():
         try:
             df = pd.read_csv(file_path)
-            
+            global collar_data, survey_data, sample_data, geology_data
             if 'geology' in file_name.lower():
                 global geology_data
                 geology_data = df
@@ -35,10 +35,13 @@ def import_files_to_dataframe():
                 # For example, if 'survey' is in the file name, set DataFrame name to 'survey_data'
                 if 'survey' in file_name.lower():
                     df_name = 'survey_data'
+                    survey_data = df.copy()
                 elif 'sample' in file_name.lower():
                     df_name = 'sample_data'
+                    sample_data = df.copy()
                 elif 'collar' in file_name.lower():
                     df_name = 'collar_data'
+                    collar_data = df.copy()
                 else:
                     df_name = file_name
                 
@@ -47,6 +50,8 @@ def import_files_to_dataframe():
 
         except Exception as e:
             print(f"Error importing '{file_name}': {str(e)}")
+
+
 
 def main():
     root = tk.Tk()
@@ -69,6 +74,7 @@ def main():
     import_button.pack()
 
     root.mainloop()
+    return collar_data, survey_data, sample_data, geology_data
 
 if __name__ == "__main__":
     main()
