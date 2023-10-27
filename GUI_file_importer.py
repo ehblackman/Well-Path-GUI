@@ -18,7 +18,7 @@ def update_file_listbox():
     for file_name in selected_files.values():
         file_list.insert(tk.END, file_name)
 
-def import_files_to_dataframe():
+def import_files_to_dataframe(root):
     for file_path, file_name in selected_files.items():
         try:
             df = pd.read_csv(file_path)
@@ -51,7 +51,8 @@ def import_files_to_dataframe():
         except Exception as e:
             print(f"Error importing '{file_name}': {str(e)}")
 
-
+    # Close the root window after the import is complete
+    root.destroy()
 
 def main():
     root = tk.Tk()
@@ -70,7 +71,7 @@ def main():
     browse_button = tk.Button(frame, text="Browse", command=browse_files)
     browse_button.pack()
 
-    import_button = tk.Button(frame, text="Import CSV Files", command=import_files_to_dataframe)
+    import_button = tk.Button(frame, text="Import CSV Files", command=lambda *i: import_files_to_dataframe(root))
     import_button.pack()
 
     root.mainloop()
