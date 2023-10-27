@@ -1,19 +1,19 @@
 import GUI_file_importer
-from data_clean import *
-from plotting.py import *
+import data_clean
+import plotting
 
 def main():
   # GUI import
   collar_data, survey_data, sample_data, geology_data = GUI_file_importer.main()
 
   # Data stuff
-  surveys = import_survey(survey_data)
-  collars = import_collar(collar_data, surveys)  
-  samples = import_sample(sample_data, collars)
-  tops = import_geology(geology_data, collars)
+  surveys = data_clean.import_survey(survey_data)
+  collars = data_clean.import_collar(collar_data, surveys)  
+  samples = data_clean.import_sample(sample_data, collars)
+  tops = data_clean.import_geology(geology_data, collars)
 
   # Plotting
-  plot(collars, tops)
+  plotting.plot(collars, tops)
   # Saving
 
   return collars, surveys, samples, tops
