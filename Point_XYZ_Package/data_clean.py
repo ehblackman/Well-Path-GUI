@@ -1,6 +1,5 @@
 import well_profile as wp
 import pandas as pd
-from GUI_file_importer import main
 
 
 
@@ -125,6 +124,8 @@ def get_point_info(wells, data, depth_type_to_query='md', col_name='MD'):
 # print(sample_data)
 #print(UWI, midpoint)
 if __name__ == "__main__":
+    from Point_XYZ_Package.GUI_file_importer import main
+
     collar_data, survey_data, sample_data, geology_data = main()
     surveys = import_survey(survey_data)
     collars = import_collar(collar_data, surveys)
