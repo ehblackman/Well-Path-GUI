@@ -15,7 +15,7 @@ def main():
   # Plotting
   plotting.plot(collars, tops)
   # Saving
-
+  print(collars, surveys, samples, tops)
   return collars, surveys, samples, tops
   
 
