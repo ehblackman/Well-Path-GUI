@@ -33,7 +33,7 @@ def import_survey(survey_data):
     survey_data = survey_data.rename(columns={'Azimuth Angle': 'azi'})
     survey_data = survey_data.rename(columns={'Inclination': 'inclination'})
     survey_data = survey_data.rename(columns={'Measured Depth': 'md'})
-    #survey_data = survey_data.rename(columns={'True Vertical Depth': 'tvd'})
+    survey_data = survey_data.rename(columns={'True Vertical Depth': 'tvd'})
 
     # Add a new column 'Ground Elevation' in survey_data
     #survey_data['Ground Elevation'] = survey_data['UWI'].map(collar_data.set_index('UWI')['Ground Elevation (m)'])
