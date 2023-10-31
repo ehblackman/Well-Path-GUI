@@ -20,7 +20,8 @@ def load_well(collar_data, survey_data, uwi):
     well_data = survey_data[survey_data['UWI']==uwi]
     north = float(list(collar['Surf-Hole Northing (NAD83)'])[0])
     east = float(list(collar['Surf-Hole Easting (NAD83)'])[0])
-    well = wp.load(well_data, set_start={'north': north, 'east': east, 'depth': 0})   
+    depth = float(list(collar['Ground Elevation (m)'])[0])
+    well = wp.load(well_data, set_start={'north': north, 'east': east, 'depth': depth})   
     return well
     
 def import_survey(survey_data):
@@ -32,6 +33,13 @@ def import_survey(survey_data):
     survey_data = survey_data.rename(columns={'Azimuth Angle': 'azi'})
     survey_data = survey_data.rename(columns={'Inclination': 'inclination'})
     survey_data = survey_data.rename(columns={'Measured Depth': 'md'})
+    #survey_data = survey_data.rename(columns={'True Vertical Depth': 'tvd'})
+
+    # Add a new column 'Ground Elevation' in survey_data
+    #survey_data['Ground Elevation'] = survey_data['UWI'].map(collar_data.set_index('UWI')['Ground Elevation (m)'])
+
+    # Calculate TVD below sea level
+    #survey_data['Survey Depth Below Sea Level'] = survey_data['Ground Elevation (m)'] - survey_data['tvd']
 
     return survey_data
 

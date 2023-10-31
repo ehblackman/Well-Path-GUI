@@ -16,10 +16,10 @@ def plot(collar_data, sample_data):
         data = sample_data[sample_data['UWI'] == uwi]
         x = data['Easting']
         y = data['Northing']
-        z = data['TVD']
+        z = data['Sample Depth Below Sea Level']
         fig.add_trace(
             go.Scatter3d(x=x, y=y, z=z,
-                         marker=dict(color='red', size=10),
+                         marker=dict(color='red', size=5),
                          line=dict(width=0),
                          name=f'Sample - {uwi}'))
 
